@@ -1,0 +1,134 @@
+syntax = "proto3";
+
+package api.v1.helloword;
+
+import "google/api/annotations.proto"; // http 路由规则包
+import "protoc-gen-openapiv2/options/annotations.proto";// swagger proto 包 path third_party
+import "validate/validate.proto";// validate proto 数据校验规则包
+
+
+option go_package = "ghub/api/v1/helloword;helloword";
+option java_multiple_files = true;
+option java_package = "api.v1.helloword";
+
+service Greeter {
+	rpc CreateGreeter (CreateGreeterRequest) returns (CreateGreeterReply){
+		option (google.api.http) = {//主要作用定义http 路由
+			post: "/api/v1/hello",//访问接口路由
+			body: "*",//请求方式
+		};
+		option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+			description: "RESTful API 更新资源";// 备注
+			summary: "create hello";// 标题
+			tags: "hello";// 分类
+		};
+	};
+	rpc UpdateGreeter (UpdateGreeterRequest) returns (UpdateGreeterReply){
+		option (google.api.http) = {//主要作用定义http 路由
+			put: "/api/v1/hello",//访问接口路由
+			body: "*",//请求方式
+		};
+		option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+			description: "RESTful API 更新资源";// 备注
+			summary: "更新 hello";// 标题
+			tags: "hello";// 分类
+		};
+	};
+	rpc DeleteGreeter (DeleteGreeterRequest) returns (DeleteGreeterReply){
+		option (google.api.http) = {//主要作用定义http 路由
+			delete: "/api/v1/hello",//访问接口路由
+		};
+		option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+			description: "RESTful API 删除资源";// 备注
+			summary: "删除 hello";// 标题
+			tags: "hello";// 分类
+		};
+	};
+	rpc GetGreeter (GetGreeterRequest) returns (GetGreeterReply){
+		option (google.api.http) = {//主要作用定义http 路由
+			get: "/api/v1/hello/{id}",//访问接口路由
+		};
+		option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+			description: "RESTful API 单个资源拉取";// 备注
+			summary: "单个 hello";// 标题
+			tags: "hello";// 分类
+		};
+	};
+	rpc ListGreeter (ListGreeterRequest) returns (ListGreeterReply){
+		option (google.api.http) = {//主要作用定义http 路由
+			get: "/api/v1/hellos",//访问接口路由
+			additional_bindings {
+				post: "/api/v1/hellos"
+				body: "*"
+			}
+		};
+		option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+			description: "RESTful API 资源拉取";// 备注
+			summary: "列表 hello";// 标题
+			tags: "hello";// 分类
+		};
+	};
+}
+
+message CreateGreeterRequest {
+	option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_schema) = {
+		json_schema: {
+			required: [ "name","roleId"]
+		},
+	};
+	int32 id = 1[
+		(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+			description: "yapi 备注信息"
+		},
+		(validate.rules).int32={
+			gt:10,
+			ignore_empty:true
+		}
+	];
+	string name = 2[
+		(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+			description: "yapi 备注信息-name"
+		},
+		(validate.rules).string = {
+			max_bytes:256,// 限制内容最大长度
+			min_bytes:100,// 限制内容最短长度
+		}
+	];
+	repeated int32 roleId = 3[
+		(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+			description: "yapi 备注信息-name"
+		},
+
+		(validate.rules).repeated= {
+			items:{
+				int32:{
+					gt:30
+				}
+			}
+			max_items:100,// 数组长度限制
+			min_items:1,// 数组长度限制
+			unique:true,// 数组唯一限制
+			ignore_empty:true,// 不确定跟最小有限制 一会验证
+
+		}
+	];
+
+}
+message CreateGreeterReply {}
+
+message UpdateGreeterRequest {}
+message UpdateGreeterReply {}
+
+message DeleteGreeterRequest {
+
+	int32 id = 1;
+}
+message DeleteGreeterReply {}
+
+message GetGreeterRequest {
+	int32 id = 1;
+}
+message GetGreeterReply {}
+
+message ListGreeterRequest {}
+message ListGreeterReply {}

@@ -1,0 +1,282 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "v1/helloword/greeter.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "Greeter"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/v1/hello": {
+      "delete": {
+        "summary": "删除 hello",
+        "description": "RESTful API 删除资源",
+        "operationId": "Greeter_DeleteGreeter",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/hellowordDeleteGreeterReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "hello"
+        ]
+      },
+      "post": {
+        "summary": "create hello",
+        "description": "RESTful API 更新资源",
+        "operationId": "Greeter_CreateGreeter",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/hellowordCreateGreeterReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/hellowordCreateGreeterRequest"
+            }
+          }
+        ],
+        "tags": [
+          "hello"
+        ]
+      },
+      "put": {
+        "summary": "更新 hello",
+        "description": "RESTful API 更新资源",
+        "operationId": "Greeter_UpdateGreeter",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/hellowordUpdateGreeterReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/hellowordUpdateGreeterRequest"
+            }
+          }
+        ],
+        "tags": [
+          "hello"
+        ]
+      }
+    },
+    "/api/v1/hello/{id}": {
+      "get": {
+        "summary": "单个 hello",
+        "description": "RESTful API 单个资源拉取",
+        "operationId": "Greeter_GetGreeter",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/hellowordGetGreeterReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "hello"
+        ]
+      }
+    },
+    "/api/v1/hellos": {
+      "get": {
+        "summary": "列表 hello",
+        "description": "RESTful API 资源拉取",
+        "operationId": "Greeter_ListGreeter",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/hellowordListGreeterReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "hello"
+        ]
+      },
+      "post": {
+        "summary": "列表 hello",
+        "description": "RESTful API 资源拉取",
+        "operationId": "Greeter_ListGreeter2",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/hellowordListGreeterReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/hellowordListGreeterRequest"
+            }
+          }
+        ],
+        "tags": [
+          "hello"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "hellowordCreateGreeterReply": {
+      "type": "object"
+    },
+    "hellowordCreateGreeterRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32",
+          "description": "yapi 备注信息"
+        },
+        "name": {
+          "type": "string",
+          "description": "yapi 备注信息-name"
+        },
+        "roleId": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "description": "yapi 备注信息-name"
+        }
+      },
+      "required": [
+        "name",
+        "roleId"
+      ]
+    },
+    "hellowordDeleteGreeterReply": {
+      "type": "object"
+    },
+    "hellowordGetGreeterReply": {
+      "type": "object"
+    },
+    "hellowordListGreeterReply": {
+      "type": "object"
+    },
+    "hellowordListGreeterRequest": {
+      "type": "object"
+    },
+    "hellowordUpdateGreeterReply": {
+      "type": "object"
+    },
+    "hellowordUpdateGreeterRequest": {
+      "type": "object"
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}

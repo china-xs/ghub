@@ -1,0 +1,128 @@
+syntax = "proto3";
+
+package api.v1.auth;
+
+import "google/api/annotations.proto"; // http 路由规则包
+import "protoc-gen-openapiv2/options/annotations.proto";// swagger proto 包 path third_party
+import "validate/validate.proto";// validate proto 数据校验规则包
+
+import "common/account.proto";
+
+
+option go_package = "ghub/api/v1/auth;auth";
+option java_multiple_files = true;
+option java_package = "api.v1.auth";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+	responses:{
+		key:"400",
+		value: {
+			description: "Returned when the resource does not exist.";
+			schema: {
+				json_schema: {
+					type: STRING;
+				}
+			}
+		}
+	}
+};
+service Signup {
+	option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
+		description: "ABitOfEverythingService description -- which should not be used in place of the documentation comment!"
+		external_docs: {
+			url: "https://github.com/grpc-ecosystem/grpc-gateway";
+			description: "Find out more about EchoService";
+		}
+	};
+	rpc UsingEmail(UsingEmailRequest) returns(UsingEmailReply){
+		option (google.api.http) = {//主要作用定义http 路由
+			post: "/api/v1/auth/signup/using-email",//访问接口路由
+			body: "*",//请求方式
+		};
+		option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+			description: "";// 备注
+			summary: "创建账号-邮箱注册";// 标题
+			tags: "账号管理";// 分类
+		};
+	};
+	rpc UsingPhone(UsingPhoneRequest) returns(UsingPhoneReply){
+		option (google.api.http) = {//主要作用定义http 路由
+			post: "/api/v1/auth/signup/using-phone",//访问接口路由
+			body: "*",//请求方式
+		};
+		option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+			description: "";// 备注
+			summary: "创建账号-邮箱注册";// 标题
+			tags: "账号管理";// 分类
+		};
+	};
+}
+
+message UsingEmailRequest{
+	//定义文档必填项目
+	option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_schema) = {
+		json_schema: {
+			required: ["email", "verifyCode","pwd","pwdCfm"]
+		},
+//		example:`{}`,
+	};
+	string email =1[
+		(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+			description: "邮箱地址"
+		},
+		(validate.rules).string={
+			email:true,
+			max_bytes:128,
+		}
+	];
+	string verifyCode = 2[
+		(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+			description: "邮箱验证码"
+		},
+		(validate.rules).string={
+			len_bytes : 6;
+		}
+	];
+	string username = 3[
+		(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={
+			description:"用户名称",
+		},
+		(validate.rules).string={
+			pattern:"^[a-zA-Z][a-zA-Z0-9_]{4,15}$",
+
+			// gaozihang_001 字母开头，允许5-16字节，允许字母数字下划线
+			//^[a-zA-Z][a-zA-Z0-9_]{4,15}$
+		}
+	];
+	string pwd = 4[
+		(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={
+			description:"密码",
+		}
+	];
+	string pwdCfm = 5[
+		(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={
+			description:"确认密码",
+		}
+	];
+
+}
+
+message UsingEmailReply{
+	api.common.AccountSimple account =1[
+		(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={
+			description:"账号基础数据",
+		}
+	];
+	api.common.AuthToken token = 2[
+		(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={
+			description:"登陆状态数据",
+		}
+	];
+}
+
+message UsingPhoneRequest{
+
+}
+message UsingPhoneReply {
+
+}

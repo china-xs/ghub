@@ -1,0 +1,5 @@
+UsingEmailRequest:
+  Username:
+    pattern: 用户名称长度必须是在4～15之间，字母、数字、下划线组合
+  VerifyCode:
+    len_bytes: 验证码错误,长度{{.len_bytes}}

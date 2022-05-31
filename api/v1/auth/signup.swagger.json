@@ -1,0 +1,231 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "v1/auth/signup.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "Signup",
+      "description": "ABitOfEverythingService description -- which should not be used in place of the documentation comment!",
+      "externalDocs": {
+        "description": "Find out more about EchoService",
+        "url": "https://github.com/grpc-ecosystem/grpc-gateway"
+      }
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/v1/auth/signup/using-email": {
+      "post": {
+        "summary": "创建账号-邮箱注册",
+        "operationId": "Signup_UsingEmail",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/authUsingEmailReply"
+            }
+          },
+          "400": {
+            "description": "Returned when the resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/authUsingEmailRequest"
+            }
+          }
+        ],
+        "tags": [
+          "账号管理"
+        ]
+      }
+    },
+    "/api/v1/auth/signup/using-phone": {
+      "post": {
+        "summary": "创建账号-邮箱注册",
+        "operationId": "Signup_UsingPhone",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/authUsingPhoneReply"
+            }
+          },
+          "400": {
+            "description": "Returned when the resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/authUsingPhoneRequest"
+            }
+          }
+        ],
+        "tags": [
+          "账号管理"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "authUsingEmailReply": {
+      "type": "object",
+      "properties": {
+        "account": {
+          "$ref": "#/definitions/commonAccountSimple",
+          "description": "账号基础数据"
+        },
+        "token": {
+          "$ref": "#/definitions/commonAuthToken",
+          "description": "登陆状态数据"
+        }
+      }
+    },
+    "authUsingEmailRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "邮箱地址"
+        },
+        "verifyCode": {
+          "type": "string",
+          "description": "邮箱验证码"
+        },
+        "username": {
+          "type": "string",
+          "description": "用户名称"
+        },
+        "pwd": {
+          "type": "string",
+          "description": "密码"
+        },
+        "pwdCfm": {
+          "type": "string",
+          "description": "确认密码"
+        }
+      },
+      "required": [
+        "email",
+        "verifyCode",
+        "pwd",
+        "pwdCfm"
+      ]
+    },
+    "authUsingPhoneReply": {
+      "type": "object"
+    },
+    "authUsingPhoneRequest": {
+      "type": "object"
+    },
+    "commonAccountSimple": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32",
+          "description": "账号ID"
+        },
+        "email": {
+          "type": "string",
+          "description": "邮箱地址"
+        },
+        "username": {
+          "type": "string",
+          "description": "用户名"
+        },
+        "phone": {
+          "type": "string",
+          "description": "手机号码"
+        }
+      }
+    },
+    "commonAuthToken": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string",
+          "description": "jwt-token"
+        },
+        "expireAt": {
+          "type": "string",
+          "description": "到期时间"
+        },
+        "tokenType": {
+          "type": "string",
+          "description": "token 类型"
+        },
+        "refreshToken": {
+          "type": "string",
+          "description": "刷新token"
+        },
+        "refreshExoireAt": {
+          "type": "string",
+          "description": "刷新token 有效时间"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}
