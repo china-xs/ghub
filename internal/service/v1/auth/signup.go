@@ -3,15 +3,14 @@ package service
 import (
 	"fmt"
 	"ghub/api/common"
+	"ghub/internal/biz/auth"
 	"ghub/internal/cache/role"
 	"ghub/internal/data/account"
-	"ghub/internal/data/dao/model"
 	roleRepo "ghub/internal/data/role"
 	"github.com/china-xs/gin-tpl/pkg/db"
 	"github.com/china-xs/gin-tpl/pkg/log"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-	"gorm.io/gen"
 	"time"
 
 	pb "ghub/api/v1/auth"
@@ -26,6 +25,7 @@ type SignupService struct {
 	accountRepo *account.Repo
 	roleRepo    *roleRepo.Repo
 	tx          db.Transaction
+	biz         *auth.Biz
 }
 
 func NewSignupService(log *zap.Logger,
@@ -33,6 +33,7 @@ func NewSignupService(log *zap.Logger,
 	accountRepo *account.Repo,
 	roleRepo *roleRepo.Repo,
 	cache *role.Cache,
+	biz *auth.Biz,
 ) *SignupService {
 	return &SignupService{
 		log:         log,
@@ -40,6 +41,7 @@ func NewSignupService(log *zap.Logger,
 		accountRepo: accountRepo,
 		roleRepo:    roleRepo,
 		tx:          tx,
+		biz:         biz,
 	}
 }
 
@@ -48,22 +50,31 @@ func (s *SignupService) UsingEmail(c *gin.Context, req *pb.UsingEmailRequest) (*
 	log.WithCtx(ctx, s.log).Info(_signLogUpKey,
 		zap.String("email", req.Email))
 
-	user := new(model.Account)
-	user.Username = req.Username
-	user.Email = req.Email
-	user.Pwd = req.Pwd
-	var fns = make([]func(gen.Dao) gen.Dao, 2)
-	fns[0] = account.QueryId(1)
-	fns[1] = account.PLRoles()
-	u, err := s.accountRepo.First(ctx, fns...)
-	var fns1 = make([]func(gen.Dao) gen.Dao, 2)
-	fns1[0] = account.QueryId(1)
-	fns1[1] = account.Select([]string{"state", "pwd"})
-	u.State = 0
-	s.accountRepo.Save(ctx, u, fns1...)
+	// 事务
+	if _, err := s.biz.UsingEmail(ctx, req); err != nil {
+		return nil, err
+	}
 
-	fmt.Printf("err:%v\n", err)
-	fmt.Printf("user:%v\n", u.Roles)
+	//user := new(model.Account)
+	//user.Username = req.Username
+	//user.Email = req.Email
+	//user.Pwd = req.Pwd
+	//var fns = make([]func(gen.Dao) gen.Dao, 2)
+	//fns[0] = account.QueryId(1)
+	//fns[1] = account.PLRoles()
+	//u, err := s.accountRepo.First(ctx, fns...)
+	//var fns1 = make([]func(gen.Dao) gen.Dao, 2)
+	//
+	//fns1[0] = account.QueryId(1)
+	//fns1[1] = account.Select([]string{"state", "pwd"})
+	//
+	//u.State = 0
+	//u.Phone = "134278765545"
+	//u.Pwd=req.Pwd
+	//s.accountRepo.Save(ctx, u, fns1...)
+	//
+	//fmt.Printf("err:%v\n", err)
+	//fmt.Printf("user:%v\n", u.Roles)
 	return &pb.UsingEmailReply{
 		Account: &common.AccountSimple{
 			Id:       1,

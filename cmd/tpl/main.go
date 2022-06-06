@@ -1,7 +1,7 @@
 // Package tmp
 // @author: xs
 // @date: 2022/5/18
-// @Description: tmp
+// @Description: tpl repo|cache 根据标名称生成 repo cache
 package main
 
 import (
@@ -18,6 +18,7 @@ var stubsFS embed.FS
 func main() {
 	//var filePath string
 	var models []string
+	// 待完成
 	models = []string{"account", "role"}
 	l := len(models)
 	modelData, err := stubsFS.ReadFile("stubs/repo.stub")
@@ -29,7 +30,7 @@ func main() {
 		t := models[i]
 		dir = fmt.Sprintf("./internal/data/%s", t)
 		os.MkdirAll(dir, os.ModePerm)
-		filePath = dir + "/" + t + ".go"
+		filePath = dir + "/" + t + ".gen.go"
 		modelStub := string(modelData)
 		replaces := make(map[string]string)
 		// 添加默认的替换变量

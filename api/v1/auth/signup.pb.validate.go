@@ -106,6 +106,37 @@ func (m *UsingEmailRequest) validate(all bool) error {
 
 	// no validation rules for PwdCfm
 
+	if len(m.GetRoles()) > 0 {
+
+		if l := len(m.GetRoles()); l < 1 || l > 5 {
+			err := UsingEmailRequestValidationError{
+				field:  "Roles",
+				reason: "value must contain between 1 and 5 items, inclusive",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+		for idx, item := range m.GetRoles() {
+			_, _ = idx, item
+
+			if l := len(item); l < 5 || l > 120 {
+				err := UsingEmailRequestValidationError{
+					field:  fmt.Sprintf("Roles[%v]", idx),
+					reason: "value length must be between 5 and 120 bytes, inclusive",
+				}
+				if !all {
+					return err
+				}
+				errors = append(errors, err)
+			}
+
+		}
+
+	}
+
 	if len(errors) > 0 {
 		return UsingEmailRequestMultiError(errors)
 	}

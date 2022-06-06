@@ -22,14 +22,13 @@ type GreeterGinServer interface {
 	UpdateGreeter(*gin.Context, *UpdateGreeterRequest) (*UpdateGreeterReply, error)
 }
 
-func RegisterGreeterGinServer(s *gin_tpl.Server, srv GreeterGinServer, ms ...gin.HandlerFunc) {
-	route := s.Engine.Use(ms...)
-	route.POST("/api/v1/hello", _Greeter_CreateGreeter0_Gin_Handler(s, srv))
-	route.PUT("/api/v1/hello", _Greeter_UpdateGreeter0_Gin_Handler(s, srv))
-	route.DELETE("/api/v1/hello", _Greeter_DeleteGreeter0_Gin_Handler(s, srv))
-	route.GET("/api/v1/hello/:id", _Greeter_GetGreeter0_Gin_Handler(s, srv))
-	route.POST("/api/v1/hellos", _Greeter_ListGreeter0_Gin_Handler(s, srv))
-	route.GET("/api/v1/hellos", _Greeter_ListGreeter1_Gin_Handler(s, srv))
+func RegisterGreeterGinServer(s *gin_tpl.Server, srv GreeterGinServer) {
+	s.Engine.POST("/api/v1/hello", _Greeter_CreateGreeter0_Gin_Handler(s, srv))
+	s.Engine.PUT("/api/v1/hello", _Greeter_UpdateGreeter0_Gin_Handler(s, srv))
+	s.Engine.DELETE("/api/v1/hello", _Greeter_DeleteGreeter0_Gin_Handler(s, srv))
+	s.Engine.GET("/api/v1/hello/:id", _Greeter_GetGreeter0_Gin_Handler(s, srv))
+	s.Engine.POST("/api/v1/hellos", _Greeter_ListGreeter0_Gin_Handler(s, srv))
+	s.Engine.GET("/api/v1/hellos", _Greeter_ListGreeter1_Gin_Handler(s, srv))
 }
 
 func _Greeter_CreateGreeter0_Gin_Handler(s *gin_tpl.Server, srv GreeterGinServer) func(c *gin.Context) {
@@ -47,7 +46,6 @@ func _Greeter_CreateGreeter0_Gin_Handler(s *gin_tpl.Server, srv GreeterGinServer
 					return
 				}
 			}
-
 		case "GET", "DELETE":
 			if err := c.ShouldBindQuery(&in); err != nil {
 				s.Enc(c, nil, err)
@@ -79,7 +77,6 @@ func _Greeter_UpdateGreeter0_Gin_Handler(s *gin_tpl.Server, srv GreeterGinServer
 					return
 				}
 			}
-
 		case "GET", "DELETE":
 			if err := c.ShouldBindQuery(&in); err != nil {
 				s.Enc(c, nil, err)
@@ -111,7 +108,6 @@ func _Greeter_DeleteGreeter0_Gin_Handler(s *gin_tpl.Server, srv GreeterGinServer
 					return
 				}
 			}
-
 		case "GET", "DELETE":
 			if err := c.ShouldBindQuery(&in); err != nil {
 				s.Enc(c, nil, err)
@@ -143,7 +139,6 @@ func _Greeter_GetGreeter0_Gin_Handler(s *gin_tpl.Server, srv GreeterGinServer) f
 					return
 				}
 			}
-
 		case "GET", "DELETE":
 			if err := c.ShouldBindQuery(&in); err != nil {
 				s.Enc(c, nil, err)
@@ -179,7 +174,6 @@ func _Greeter_ListGreeter0_Gin_Handler(s *gin_tpl.Server, srv GreeterGinServer) 
 					return
 				}
 			}
-
 		case "GET", "DELETE":
 			if err := c.ShouldBindQuery(&in); err != nil {
 				s.Enc(c, nil, err)
@@ -211,7 +205,6 @@ func _Greeter_ListGreeter1_Gin_Handler(s *gin_tpl.Server, srv GreeterGinServer) 
 					return
 				}
 			}
-
 		case "GET", "DELETE":
 			if err := c.ShouldBindQuery(&in); err != nil {
 				s.Enc(c, nil, err)

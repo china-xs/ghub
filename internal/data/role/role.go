@@ -67,10 +67,10 @@ func (repo Repo) Find(ctx context.Context, fns ...func(dao gen.Dao) gen.Dao) ([]
 // @param role
 // @return error
 //
-func (repo Repo) Create(ctx context.Context, role *model.Role) error {
+func (repo Repo) Create(ctx context.Context, role ...*model.Role) error {
 	db := repo.data.DB(ctx)
 	r := query.Use(db).Role
-	return r.WithContext(ctx).Create(role)
+	return r.WithContext(ctx).Create(role...)
 }
 
 //

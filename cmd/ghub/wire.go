@@ -8,6 +8,7 @@
 package main
 
 import (
+	"ghub/internal/biz"
 	"ghub/internal/cache"
 	"ghub/internal/data"
 	"ghub/internal/routes"
@@ -24,6 +25,7 @@ var ProviderSet = wire.NewSet(
 	log.ProviderSet,    // 系统日志
 	redis.ProviderSet,
 	//db.ProviderSet,		// db 依赖会导致无法识别
+	biz.ProviderSet,
 	service.ProviderSet, // 控制器
 	routes.ProviderSet,  // 路由注册
 	data.ProviderSet,

@@ -67,7 +67,7 @@ func (repo Repo) Find(ctx context.Context, fns ...func(dao gen.Dao) gen.Dao) ([]
 // @param {{PackageName}}
 // @return error
 //
-func (repo Repo) Create(ctx context.Context, {{PackageName}} *model.{{ModelName}}) error {
+func (repo Repo) Create(ctx context.Context, {{PackageName}}... *model.{{ModelName}}) error {
 	db := repo.data.DB(ctx)
 	r := query.Use(db).{{ModelName}}
 	return r.WithContext(ctx).Create({{PackageName}})

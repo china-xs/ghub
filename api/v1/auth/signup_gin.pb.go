@@ -19,10 +19,9 @@ type SignupGinServer interface {
 	UsingPhone(*gin.Context, *UsingPhoneRequest) (*UsingPhoneReply, error)
 }
 
-func RegisterSignupGinServer(s *gin_tpl.Server, srv SignupGinServer, ms ...gin.HandlerFunc) {
-	route := s.Engine.Use(ms...)
-	route.POST("/api/v1/auth/signup/using-email", _Signup_UsingEmail0_Gin_Handler(s, srv))
-	route.POST("/api/v1/auth/signup/using-phone", _Signup_UsingPhone0_Gin_Handler(s, srv))
+func RegisterSignupGinServer(s *gin_tpl.Server, srv SignupGinServer) {
+	s.Engine.POST("/api/v1/auth/signup/using-email", _Signup_UsingEmail0_Gin_Handler(s, srv))
+	s.Engine.POST("/api/v1/auth/signup/using-phone", _Signup_UsingPhone0_Gin_Handler(s, srv))
 }
 
 func _Signup_UsingEmail0_Gin_Handler(s *gin_tpl.Server, srv SignupGinServer) func(c *gin.Context) {
@@ -40,7 +39,6 @@ func _Signup_UsingEmail0_Gin_Handler(s *gin_tpl.Server, srv SignupGinServer) fun
 					return
 				}
 			}
-
 		case "GET", "DELETE":
 			if err := c.ShouldBindQuery(&in); err != nil {
 				s.Enc(c, nil, err)
@@ -72,7 +70,6 @@ func _Signup_UsingPhone0_Gin_Handler(s *gin_tpl.Server, srv SignupGinServer) fun
 					return
 				}
 			}
-
 		case "GET", "DELETE":
 			if err := c.ShouldBindQuery(&in); err != nil {
 				s.Enc(c, nil, err)

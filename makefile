@@ -16,7 +16,7 @@ init:
 	# 错误状态返回提示语，使用kratos error
 	go install github.com/go-kratos/kratos/cmd/protoc-gen-go-errors/v2
 	# proto 生成gin 代码包
-	go install github.com/china-xs/gin-tpl/cmd/protoc-gen-go-gin1@latest
+	go install github.com/china-xs/gin-tpl/cmd/protoc-gen-go-gin@latest
 	# 安装 grpc 模块代码包
 	go install google.golang.org/protobuf/cmd/protoc-gen-go
 	# wire 安装
@@ -38,7 +38,7 @@ http:
            --proto_path=../third_party \
            --go_out=paths=source_relative:. \
            --go-grpc_out=paths=source_relative:. \
-           --go-gin1_out=paths=source_relative:. \
+           --go-gin_out=paths=source_relative:. \
            --validate_out=paths=source_relative,lang=go:. \
            --go-errors_out=paths=source_relative:. \
            --openapiv2_out . \

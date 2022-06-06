@@ -7,6 +7,8 @@
 package main
 
 import (
+	"ghub/internal/biz"
+	"ghub/internal/biz/auth"
 	"ghub/internal/cache"
 	role2 "ghub/internal/cache/role"
 	"ghub/internal/data"
@@ -71,7 +73,8 @@ func initApp(path string) (*gin_tpl.Server, func(), error) {
 	repo := account.NewRepo(dbData, logger)
 	roleRepo := role.NewRepo(dbData, logger)
 	cache := role2.NewCache(logger, client, roleRepo)
-	signupService := service2.NewSignupService(logger, transaction, repo, roleRepo, cache)
+	biz := auth.NewBiz(logger, transaction, repo, roleRepo)
+	signupService := service2.NewSignupService(logger, transaction, repo, roleRepo, cache, biz)
 	routesRoutes := routes.Routes{
 		HelloSrv: greeterService,
 		V1Signup: signupService,
@@ -85,4 +88,4 @@ func initApp(path string) (*gin_tpl.Server, func(), error) {
 
 // wire.go:
 
-var ProviderSet = wire.NewSet(config.ProviderSet, log.ProviderSet, redis.ProviderSet, service3.ProviderSet, routes.ProviderSet, data.ProviderSet, cache.ProviderSet)
+var ProviderSet = wire.NewSet(config.ProviderSet, log.ProviderSet, redis.ProviderSet, biz.ProviderSet, service3.ProviderSet, routes.ProviderSet, data.ProviderSet, cache.ProviderSet)

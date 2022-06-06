@@ -1,7 +1,7 @@
 // Package gorm
 // @author: xs
 // @date: 2022/5/17
-// @Description: gorm
+// @Description: 根目录 cli:make gorm
 package main
 
 import (

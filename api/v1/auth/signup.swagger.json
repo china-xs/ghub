@@ -138,6 +138,13 @@
         "pwdCfm": {
           "type": "string",
           "description": "确认密码"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "角色组名称"
         }
       },
       "required": [

@@ -104,7 +104,22 @@ message UsingEmailRequest{
 			description:"确认密码",
 		}
 	];
-
+	repeated string roles = 6[
+		(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field)={
+			description:"角色组名称",
+			},
+		(validate.rules).repeated={
+			ignore_empty:true,
+			max_items:5,//限制用户最多限制
+			min_items:1,//角色数量最小限制
+			items:{
+				string:{
+					max_bytes:120,// 限制名称长度
+					min_bytes:5,// 限制名称长度
+				}
+			}
+		}
+	];
 }
 
 message UsingEmailReply{
