@@ -29,32 +29,34 @@ var defaultConfig asynq.Config = asynq.Config{
 }
 
 type (
-	Worker struct {
-		log     *zap.Logger
-		configs asynq.Config
-		server  *asynq.Server
-		mux     *asynq.ServeMux
+	WorkerOption func(*Worker)
+	Worker       struct {
+		log      *zap.Logger
+		configs  asynq.Config
+		server   *asynq.Server
+		mux      *asynq.ServeMux
+		redisOpt *asynq.RedisClientOpt
 	}
 )
 
-func NewAsynqWorker(log *zap.Logger,
-) *Worker {
-	return &Worker{
-		log:     log,
+func NewAsynqWorker(opts ...WorkerOption) (*Worker, error) {
+	worker := &Worker{
 		configs: defaultConfig,
 	}
-}
+	for _, o := range opts {
+		o(worker)
+	}
 
-//handlers
-func (l *Worker) Mux(mux *asynq.ServeMux) *Worker {
-	l.mux = mux
-	return l
-}
+	if worker.redisOpt == nil || worker.log == nil {
+		return nil, errors.New("redisOpt and logger needed")
+	}
 
-//server
-func (l *Worker) Server(s *asynq.Server) *Worker {
-	l.server = s
-	return l
+	server := asynq.NewServer(
+		worker.redisOpt,
+		worker.configs,
+	)
+	worker.server = server
+	return worker, nil
 }
 
 //server
@@ -63,4 +65,32 @@ func (l *Worker) Run() error {
 		return errors.New("handlers or server is nil")
 	}
 	return l.server.Run(l.mux)
+}
+
+//setting logger
+func WithLogger(l *zap.Logger) WorkerOption {
+	return func(o *Worker) {
+		o.log = l
+	}
+}
+
+//worker setting
+func WithConfig(c asynq.Config) WorkerOption {
+	return func(o *Worker) {
+		o.configs = c
+	}
+}
+
+//worker setting
+func WithHandlers(m *asynq.ServeMux) WorkerOption {
+	return func(o *Worker) {
+		o.mux = m
+	}
+}
+
+//redis opt
+func WithRedisOpt(r *asynq.RedisClientOpt) WorkerOption {
+	return func(o *Worker) {
+		o.redisOpt = r
+	}
 }
