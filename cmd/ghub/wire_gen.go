@@ -16,6 +16,7 @@ import (
 	service3 "ghub/internal/service"
 	service2 "ghub/internal/service/v1/auth"
 	"ghub/internal/service/v1/helloword"
+	"ghub/internal/tasks"
 	"github.com/china-xs/gin-tpl"
 	"github.com/china-xs/gin-tpl/pkg/config"
 	"github.com/china-xs/gin-tpl/pkg/db"
@@ -67,7 +68,8 @@ func initApp(path string) (*gin_tpl.Server, func(), error) {
 		return nil, nil, err
 	}
 	transaction := data.NewTx(dbData)
-	greeterService := service.NewGreeterService(logger, client, gormDB, transaction)
+	asynqClient := tasks.NewTaskClient(redisOptions)
+	greeterService := service.NewGreeterService(logger, client, gormDB, transaction, asynqClient)
 	repo := account.NewRepo(dbData, logger)
 	roleRepo := role.NewRepo(dbData, logger)
 	cache := role2.NewCache(logger, client, roleRepo)
@@ -85,4 +87,4 @@ func initApp(path string) (*gin_tpl.Server, func(), error) {
 
 // wire.go:
 
-var ProviderSet = wire.NewSet(config.ProviderSet, log.ProviderSet, redis.ProviderSet, service3.ProviderSet, routes.ProviderSet, data.ProviderSet, cache.ProviderSet)
+var ProviderSet = wire.NewSet(config.ProviderSet, log.ProviderSet, redis.ProviderSet, service3.ProviderSet, routes.ProviderSet, data.ProviderSet, cache.ProviderSet, tasks.ProviderSet)
