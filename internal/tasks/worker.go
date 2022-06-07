@@ -9,12 +9,10 @@
 package tasks
 
 import (
-	"context"
 	"errors"
 	"github.com/hibiken/asynq"
 	"go.uber.org/zap"
 	"runtime"
-	"time"
 )
 
 /**
@@ -65,23 +63,4 @@ func (l *Worker) Run() error {
 		return errors.New("handlers or server is nil")
 	}
 	return l.server.Run(l.mux)
-}
-
-//记录日志中间件
-func (l *Worker) LoggingMiddleware(h asynq.Handler) asynq.Handler {
-	return asynq.HandlerFunc(func(ctx context.Context, t *asynq.Task) error {
-		start := time.Now()
-		l.log.Info("processing", zap.String("task type", t.Type()))
-		err := h.ProcessTask(ctx, t)
-		if err != nil {
-			return err
-		}
-		l.log.Info("processed",
-			zap.String("type", t.Type()),
-			zap.String("payload", string(t.Payload())),
-			zap.Error(err),
-			zap.Duration("elapsed", time.Since(start)),
-		)
-		return nil
-	})
 }
