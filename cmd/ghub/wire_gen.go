@@ -68,8 +68,7 @@ func initApp(path string) (*gin_tpl.Server, func(), error) {
 		return nil, nil, err
 	}
 	transaction := data.NewTx(dbData)
-	asynqClient := tasks.NewTaskClient(redisOptions)
-	greeterService := service.NewGreeterService(logger, client, gormDB, transaction, asynqClient)
+	greeterService := service.NewGreeterService(logger, client, gormDB, transaction)
 	repo := account.NewRepo(dbData, logger)
 	roleRepo := role.NewRepo(dbData, logger)
 	cache := role2.NewCache(logger, client, roleRepo)
