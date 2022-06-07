@@ -15,7 +15,7 @@ import (
 )
 
 // 定义项目配置文件
-var configFile = flag.String("f", "../../configs/app.yaml", "set config file which viper will loading.")
+var configFile = flag.String("f", "../../configs/worker.yaml", "set config file which viper will loading.")
 
 func main() {
 	flag.Parse()

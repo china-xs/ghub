@@ -1,0 +1,25 @@
+http:
+ name: ghub
+ Port: 8080
+ timeout: 5s
+ openApi: true
+
+log:
+ filename: /tmp/worker.log
+ maxSize: 500
+ maxBackups: 3
+ maxAge: 3
+ level: "debug"
+ stdout: true
+
+db:
+ host: 192.168.56.10
+ port: 3306
+ database: cms
+ user: db_user
+ pwd: db_pass
+ prefix: a_
+redis:
+ addr: 192.168.56.10:6379
+ password: foobared
+ db: 1
