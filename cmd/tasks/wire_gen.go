@@ -58,13 +58,7 @@ func initApp(path string) (*tasks.Worker, func(), error) {
 	handlers := &routes.Handlers{
 		SendmsgHandler: handler,
 	}
-	redisOptions, err := redis.NewOps(viper)
-	if err != nil {
-		cleanup2()
-		cleanup()
-		return nil, nil, err
-	}
-	worker := newApp(handlers, redisOptions, logger)
+	worker := newApp(handlers, viper, logger)
 	return worker, func() {
 		cleanup2()
 		cleanup()

@@ -11,6 +11,7 @@ import (
 	"ghub/internal/tasks/routes"
 	"github.com/china-xs/gin-tpl/pkg/redis"
 	"github.com/hibiken/asynq"
+	"github.com/spf13/viper"
 	"go.uber.org/zap"
 )
 
@@ -31,11 +32,16 @@ func main() {
 
 }
 
-func newApp(handlers *routes.Handlers, options *redis.Options, log *zap.Logger) *tasks.Worker {
+func newApp(handlers *routes.Handlers, v *viper.Viper, log *zap.Logger) *tasks.Worker {
 	var ops []tasks.WorkerOption
 	mux := asynq.NewServeMux()
 	mux.Use(middlewares.LoggingHandler(log))
 	handlers.InitHandlers(mux)
+
+	options, err := redis.NewOps(v)
+	if err != nil {
+		panic(err)
+	}
 
 	ops = append(ops,
 		tasks.WithLogger(log),
