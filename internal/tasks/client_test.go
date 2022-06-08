@@ -20,7 +20,7 @@ import (
 
 //任务投递
 func TestNewTaskClient(t *testing.T) {
-	viper, err := config.New("../../configs/app.yaml")
+	viper, err := config.New("../../configs/worker.yaml")
 	assert.Nil(t, err)
 
 	options, err := redis.NewOps(viper)
@@ -44,5 +44,11 @@ func TestNewTaskClient(t *testing.T) {
 	task2, _ := sendmsg.NewMemberRegisterSendMsgTask("test2")
 	info2, err := client.Enqueue(task2, asynq.Queue("critical"))
 	t.Log(info2)
+	assert.Nil(t, err)
+
+	//重试,唯一,超时
+	task3, _ := sendmsg.NewMemberRegisterSendMsgTask("test3")
+	info3, err := client.Enqueue(task3, asynq.MaxRetry(2), asynq.TaskID("abc"), asynq.Deadline(time.Now().Add(2*time.Minute)))
+	t.Log(info3)
 	assert.Nil(t, err)
 }
