@@ -5,8 +5,10 @@
 package routes
 
 import (
+	pV1apisign "ghub/api/v1/apisign"
 	pV1signup "ghub/api/v1/auth"
 	"ghub/api/v1/helloword"
+	v1Apisign "ghub/internal/service/v1/apisign"
 	v1Signup "ghub/internal/service/v1/auth"
 	service "ghub/internal/service/v1/helloword"
 	tpl "github.com/china-xs/gin-tpl"
@@ -25,11 +27,13 @@ type Routes struct {
 	//Helloword helloword.GreeterGinServer
 	//GreeterService
 	//Db *gorm.DB
-	V1Signup *v1Signup.SignupService
+	V1Signup  *v1Signup.SignupService
+	V1Apisign *v1Apisign.ApisignService
 }
 
 func (r *Routes) InitRoutes(app *tpl.Server) {
 	helloword.RegisterGreeterGinServer(app, r.HelloSrv)
 	//query.SetDefault(r.Db)
 	pV1signup.RegisterSignupGinServer(app, r.V1Signup)
+	pV1apisign.RegisterApisignGinServer(app, r.V1Apisign)
 }

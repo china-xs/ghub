@@ -13,7 +13,8 @@ import (
 	"ghub/internal/data/account"
 	"ghub/internal/data/role"
 	"ghub/internal/routes"
-	service3 "ghub/internal/service"
+	service4 "ghub/internal/service"
+	service3 "ghub/internal/service/v1/apisign"
 	service2 "ghub/internal/service/v1/auth"
 	"ghub/internal/service/v1/helloword"
 	"ghub/internal/tasks"
@@ -73,9 +74,11 @@ func initApp(path string) (*gin_tpl.Server, func(), error) {
 	roleRepo := role.NewRepo(dbData, logger)
 	cache := role2.NewCache(logger, client, roleRepo)
 	signupService := service2.NewSignupService(logger, transaction, repo, roleRepo, cache)
+	apisignService := service3.NewApisignService(viper)
 	routesRoutes := routes.Routes{
-		HelloSrv: greeterService,
-		V1Signup: signupService,
+		HelloSrv:  greeterService,
+		V1Signup:  signupService,
+		V1Apisign: apisignService,
 	}
 	server := newApp(routesRoutes, logger, viper)
 	return server, func() {
@@ -86,4 +89,4 @@ func initApp(path string) (*gin_tpl.Server, func(), error) {
 
 // wire.go:
 
-var ProviderSet = wire.NewSet(config.ProviderSet, log.ProviderSet, redis.ProviderSet, service3.ProviderSet, routes.ProviderSet, data.ProviderSet, cache.ProviderSet, tasks.ProviderSet)
+var ProviderSet = wire.NewSet(config.ProviderSet, log.ProviderSet, redis.ProviderSet, service4.ProviderSet, routes.ProviderSet, data.ProviderSet, cache.ProviderSet, tasks.ProviderSet)

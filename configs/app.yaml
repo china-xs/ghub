@@ -5,7 +5,7 @@ http:
   openApi: true
 
 log:
-  filename: /tmp/app.log
+  filename: ../../runtimes/logs/app.log
   maxSize: 500
   maxBackups: 3
   maxAge: 3
@@ -13,13 +13,32 @@ log:
   stdout: true
 
 db:
-  host: 192.168.56.10
-  port: 3306
-  database: cms
-  user: db_user
-  pwd: db_pass
-  prefix: a_
+  host: 39.100.139.50
+  port: 30008
+  database: enbrands
+  user: prod
+  pwd: g*bb5fo2eFKZb7clgoCy6Tpmd*#m39
+  prefix: t_
 redis:
-  addr: 192.168.56.10:6379
-  password: foobared
+  addr: 39.100.150.21:30005
+  password: YJF#33bbe31d51b3b60370dc5%2016
   db: 1
+
+apisign:
+  secret: apisign2eFKZb7clgoCy6^%*
+  timeout: 20 #min
+  path:
+    - /api.v1.apisign.Apisign/ApisignGetDemo
+  prefix:
+    - /api.v1.apisign.Apisign/ApisignGetDemo
+  whitelist:
+    - /api.v1.helloword.Greeter/GetGreeter
+
+jwt:
+  secret: jwt2eFKZb7clgoCy6^%*
+  path:
+    - /api.v1.apisign.Apisign/ApisignGetDemo
+  prefix:
+    - /api.v1.apisign.Apisign/ApisignGetDemo
+  whitelist:
+    - /api.v1.helloword.Greeter/GetGreeter
