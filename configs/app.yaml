@@ -37,8 +37,8 @@ apisign:
 jwt:
   secret: jwt2eFKZb7clgoCy6^%*
   path:
-    - /api.v1.apisign.Apisign/ApisignGetDemo
+    - /api.v1.apisign.Apisign/GetTokenInfo
   prefix:
-    - /api.v1.apisign.Apisign/ApisignGetDemo
+    - /api.v1.apisign.Apisign/GetTokenInfo
   whitelist:
     - /api.v1.helloword.Greeter/GetGreeter
