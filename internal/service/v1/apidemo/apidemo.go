@@ -3,31 +3,31 @@ package service
 import (
 	"errors"
 	"fmt"
+	pb "ghub/api/v1/apidemo"
 	"github.com/china-xs/gin-tpl/pkg/api_sign"
 	"github.com/china-xs/gin-tpl/pkg/jwt_auth"
 	"github.com/gin-gonic/gin"
-	"github.com/golang-jwt/jwt/v4"
 	"github.com/parkingwang/go-sign"
-	"github.com/spf13/viper"
 	"net/url"
 	"strconv"
-	"time"
-
-	pb "ghub/api/v1/apidemo"
 )
 
 type ApidemoService struct {
 	pb.UnimplementedApidemoServer
-	V *viper.Viper
+	authOptions *jwt_auth.Options
+	signOptions *api_sign.Options
+	jwtAuth     *jwt_auth.JwtAuth
 }
 
 const (
 	JWT_USER_ID = "jwt_user_id"
 )
 
-func NewApidemoService(v *viper.Viper) *ApidemoService {
+func NewApidemoService(jo *jwt_auth.Options, ja *jwt_auth.JwtAuth, ao *api_sign.Options) *ApidemoService {
 	return &ApidemoService{
-		V: v,
+		authOptions: jo,
+		signOptions: ao,
+		jwtAuth:     ja,
 	}
 }
 
@@ -40,11 +40,6 @@ func (s *ApidemoService) ApisignCheckDemo(ctx *gin.Context, req *pb.SignRequest)
 //生成api 签名demo
 ///api/v1/get-sign?name=李先后&id=12&time_stamp=1654756018&nonce_str=s1231sdfsdhfwerwe&appid=1231231abc
 func (s *ApidemoService) CreateSignDemo(ctx *gin.Context, req *pb.CreateSignRequest) (*pb.CreateSignReply, error) {
-	options, err := api_sign.NewOps(s.V)
-	if err != nil {
-		return nil, err
-	}
-
 	signer := sign.NewGoSignerMd5()
 	signer.SetAppId(req.Appid)
 	signer.SetTimeStamp(req.TimeStamp)
@@ -63,7 +58,7 @@ func (s *ApidemoService) CreateSignDemo(ctx *gin.Context, req *pb.CreateSignRequ
 
 	fmt.Printf("source:%s\n", signer.GetSignBodyString())
 
-	signer.SetAppSecretWrapBody(options.Secret)
+	signer.SetAppSecretWrapBody(s.signOptions.Secret)
 	return &pb.CreateSignReply{
 		Sign: signer.GetSignedQuery(),
 	}, nil
@@ -71,11 +66,7 @@ func (s *ApidemoService) CreateSignDemo(ctx *gin.Context, req *pb.CreateSignRequ
 
 //生成jwt-token demo
 func (s *ApidemoService) CreateTokenDemo(ctx *gin.Context, req *pb.CreateTokenRequest) (*pb.CreateTokenReply, error) {
-	options, err := jwt_auth.NewOps(s.V)
-	if err != nil {
-		return nil, err
-	}
-	token, err := createToken(options.Secret, map[string]interface{}{
+	token, err := s.jwtAuth.CreateTokenWithMapPayload(map[string]interface{}{
 		JWT_USER_ID: "256",
 	}, 3600)
 
@@ -87,22 +78,6 @@ func (s *ApidemoService) CreateTokenDemo(ctx *gin.Context, req *pb.CreateTokenRe
 		Token: token,
 	}, nil
 
-}
-
-//生成jwt-token
-func createToken(secretKey string, payloads map[string]interface{}, seconds int64) (string, error) {
-	now := time.Now().Unix()
-	claims := make(jwt.MapClaims)
-	claims["exp"] = now + seconds //过期时间
-	claims["iat"] = now
-	for k, v := range payloads {
-		claims[k] = v
-	}
-
-	token := jwt.New(jwt.SigningMethodHS256)
-	token.Claims = claims
-
-	return token.SignedString([]byte(secretKey))
 }
 
 //解析jwt-token中的登录信息

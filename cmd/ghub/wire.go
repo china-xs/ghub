@@ -14,7 +14,9 @@ import (
 	"ghub/internal/service"
 	"ghub/internal/tasks"
 	tpl "github.com/china-xs/gin-tpl"
+	"github.com/china-xs/gin-tpl/pkg/api_sign"
 	"github.com/china-xs/gin-tpl/pkg/config"
+	"github.com/china-xs/gin-tpl/pkg/jwt_auth"
 	"github.com/china-xs/gin-tpl/pkg/log"
 	"github.com/china-xs/gin-tpl/pkg/redis"
 	"github.com/google/wire"
@@ -28,8 +30,10 @@ var ProviderSet = wire.NewSet(
 	service.ProviderSet, // 控制器
 	routes.ProviderSet,  // 路由注册
 	data.ProviderSet,
-	cache.ProviderSet, // 缓存
-	tasks.ProviderSet, //任务
+	cache.ProviderSet,    // 缓存
+	tasks.ProviderSet,    //任务
+	jwt_auth.ProviderSet, //jwt
+	api_sign.ProviderSet, //api_sign
 )
 
 // cf config path

@@ -19,8 +19,10 @@ import (
 	"ghub/internal/service/v1/helloword"
 	"ghub/internal/tasks"
 	"github.com/china-xs/gin-tpl"
+	"github.com/china-xs/gin-tpl/pkg/api_sign"
 	"github.com/china-xs/gin-tpl/pkg/config"
 	"github.com/china-xs/gin-tpl/pkg/db"
+	"github.com/china-xs/gin-tpl/pkg/jwt_auth"
 	"github.com/china-xs/gin-tpl/pkg/log"
 	"github.com/china-xs/gin-tpl/pkg/redis"
 	"github.com/google/wire"
@@ -74,7 +76,20 @@ func initApp(path string) (*gin_tpl.Server, func(), error) {
 	roleRepo := role.NewRepo(dbData, logger)
 	cache := role2.NewCache(logger, client, roleRepo)
 	signupService := service2.NewSignupService(logger, transaction, repo, roleRepo, cache)
-	apidemoService := service3.NewApidemoService(viper)
+	jwt_authOptions, err := jwt_auth.NewOps(viper)
+	if err != nil {
+		cleanup2()
+		cleanup()
+		return nil, nil, err
+	}
+	jwtAuth := jwt_auth.NewJwtAuth(jwt_authOptions)
+	api_signOptions, err := api_sign.NewOps(viper)
+	if err != nil {
+		cleanup2()
+		cleanup()
+		return nil, nil, err
+	}
+	apidemoService := service3.NewApidemoService(jwt_authOptions, jwtAuth, api_signOptions)
 	routesRoutes := routes.Routes{
 		HelloSrv:  greeterService,
 		V1Signup:  signupService,
@@ -89,4 +104,4 @@ func initApp(path string) (*gin_tpl.Server, func(), error) {
 
 // wire.go:
 
-var ProviderSet = wire.NewSet(config.ProviderSet, log.ProviderSet, redis.ProviderSet, service4.ProviderSet, routes.ProviderSet, data.ProviderSet, cache.ProviderSet, tasks.ProviderSet)
+var ProviderSet = wire.NewSet(config.ProviderSet, log.ProviderSet, redis.ProviderSet, service4.ProviderSet, routes.ProviderSet, data.ProviderSet, cache.ProviderSet, tasks.ProviderSet, jwt_auth.ProviderSet, api_sign.ProviderSet)
