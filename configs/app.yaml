@@ -28,17 +28,17 @@ apisign:
   secret: apisign2eFKZb7clgoCy6^%*
   timeout: 20 #min
   path:
-    - /api.v1.apisign.Apisign/ApisignGetDemo
+    - /api.v1.apidemo.Apidemo/ApisignCheckDemo
   prefix:
-    - /api.v1.apisign.Apisign/ApisignGetDemo
+    - /api.v1.apidemo.Apidemo/ApisignCheckDemo
   whitelist:
     - /api.v1.helloword.Greeter/GetGreeter
 
 jwt:
   secret: jwt2eFKZb7clgoCy6^%*
   path:
-    - /api.v1.apisign.Apisign/GetTokenInfo
+    - /api.v1.apidemo.Apidemo/GetTokenInfo
   prefix:
-    - /api.v1.apisign.Apisign/GetTokenInfo
+    - /api.v1.apidemo.Apidemo/GetTokenInfo
   whitelist:
     - /api.v1.helloword.Greeter/GetGreeter

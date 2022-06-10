@@ -14,7 +14,7 @@ import (
 	"ghub/internal/data/role"
 	"ghub/internal/routes"
 	service4 "ghub/internal/service"
-	service3 "ghub/internal/service/v1/apisign"
+	service3 "ghub/internal/service/v1/apidemo"
 	service2 "ghub/internal/service/v1/auth"
 	"ghub/internal/service/v1/helloword"
 	"ghub/internal/tasks"
@@ -74,11 +74,11 @@ func initApp(path string) (*gin_tpl.Server, func(), error) {
 	roleRepo := role.NewRepo(dbData, logger)
 	cache := role2.NewCache(logger, client, roleRepo)
 	signupService := service2.NewSignupService(logger, transaction, repo, roleRepo, cache)
-	apisignService := service3.NewApisignService(viper)
+	apidemoService := service3.NewApidemoService(viper)
 	routesRoutes := routes.Routes{
 		HelloSrv:  greeterService,
 		V1Signup:  signupService,
-		V1Apisign: apisignService,
+		V1Apidemo: apidemoService,
 	}
 	server := newApp(routesRoutes, logger, viper)
 	return server, func() {

@@ -3,7 +3,6 @@ package service
 import (
 	"errors"
 	"fmt"
-	pb "ghub/api/v1/apisign"
 	"github.com/china-xs/gin-tpl/pkg/api_sign"
 	"github.com/china-xs/gin-tpl/pkg/jwt_auth"
 	"github.com/gin-gonic/gin"
@@ -13,10 +12,12 @@ import (
 	"net/url"
 	"strconv"
 	"time"
+
+	pb "ghub/api/v1/apidemo"
 )
 
-type ApisignService struct {
-	pb.UnimplementedApisignServer
+type ApidemoService struct {
+	pb.UnimplementedApidemoServer
 	V *viper.Viper
 }
 
@@ -24,21 +25,21 @@ const (
 	JWT_USER_ID = "jwt_user_id"
 )
 
-func NewApisignService(v *viper.Viper) *ApisignService {
-	return &ApisignService{
+func NewApidemoService(v *viper.Viper) *ApidemoService {
+	return &ApidemoService{
 		V: v,
 	}
 }
 
 //验证接口签名 demo
 ///api/v1/get-sign?name=李先后&id=12&time_stamp=1654756018&nonce_str=s1231sdfsdhfwerwe&appid=1231231abc&sign=05d7e4b9cbfe26b037421cd228089c67
-func (s *ApisignService) ApisignCheckDemo(ctx *gin.Context, req *pb.SignRequest) (*pb.SignReply, error) {
+func (s *ApidemoService) ApisignCheckDemo(ctx *gin.Context, req *pb.SignRequest) (*pb.SignReply, error) {
 	return &pb.SignReply{}, nil
 }
 
 //生成api 签名demo
 ///api/v1/get-sign?name=李先后&id=12&time_stamp=1654756018&nonce_str=s1231sdfsdhfwerwe&appid=1231231abc
-func (s *ApisignService) CreateSignDemo(ctx *gin.Context, req *pb.CreateSignRequest) (*pb.CreateSignReply, error) {
+func (s *ApidemoService) CreateSignDemo(ctx *gin.Context, req *pb.CreateSignRequest) (*pb.CreateSignReply, error) {
 	options, err := api_sign.NewOps(s.V)
 	if err != nil {
 		return nil, err
@@ -69,7 +70,7 @@ func (s *ApisignService) CreateSignDemo(ctx *gin.Context, req *pb.CreateSignRequ
 }
 
 //生成jwt-token demo
-func (s *ApisignService) CreateTokenDemo(ctx *gin.Context, req *pb.CreateTokenRequest) (*pb.CreateTokenReply, error) {
+func (s *ApidemoService) CreateTokenDemo(ctx *gin.Context, req *pb.CreateTokenRequest) (*pb.CreateTokenReply, error) {
 	options, err := jwt_auth.NewOps(s.V)
 	if err != nil {
 		return nil, err
@@ -105,7 +106,7 @@ func createToken(secretKey string, payloads map[string]interface{}, seconds int6
 }
 
 //解析jwt-token中的登录信息
-func (s *ApisignService) GetTokenInfo(ctx *gin.Context, req *pb.GetTokenInfoRequest) (*pb.GetTokenInfoReply, error) {
+func (s *ApidemoService) GetTokenInfo(ctx *gin.Context, req *pb.GetTokenInfoRequest) (*pb.GetTokenInfoReply, error) {
 	userId, err := GetJwtUserIdFromCtx(ctx)
 	if err != nil {
 		return nil, err
@@ -123,6 +124,5 @@ func GetJwtUserIdFromCtx(ctx *gin.Context) (int64, error) {
 	if err != nil {
 		return 0, errors.New("未登录")
 	}
-
 	return userId, nil
 }

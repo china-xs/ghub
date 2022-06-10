@@ -1,15 +1,15 @@
 syntax = "proto3";
 
-package api.v1.apisign;
+package api.v1.apidemo;
 import "google/api/annotations.proto"; // http 路由规则包
 import "protoc-gen-openapiv2/options/annotations.proto";// swagger proto 包 path third_party
 import "validate/validate.proto";// validate proto 数据校验规则包
 
-option go_package = "ghub/api/v1/apisign;apisign";
+option go_package = "ghub/api/v1/apidemo;apidemo";
 option java_multiple_files = true;
-option java_package = "api.v1.apisign";
+option java_package = "api.v1.apidemo";
 
-service Apisign {
+service Apidemo {
 	rpc ApisignCheckDemo (SignRequest) returns (SignReply){
 		option (google.api.http) = {//主要作用定义http 路由
 			get: "/api/v1/get-sign",//访问接口路由
@@ -17,7 +17,7 @@ service Apisign {
 		option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
 			description: "接口签名get demo";// 备注
 			summary: "接口签名get demo";// 标题
-			tags: "apisign";// 分类
+			tags: "apidemo";// 分类
 		};
 	};
 
@@ -28,7 +28,7 @@ service Apisign {
 		option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
 			description: "生成签名";// 备注
 			summary: "生成签名";// 标题
-			tags: "apisign";// 分类
+			tags: "apidemo";// 分类
 		};
 	};
 
