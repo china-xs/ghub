@@ -20,7 +20,7 @@ import (
 
 //任务投递
 func TestNewTaskClient(t *testing.T) {
-	viper, err := config.New("../../configs/worker.yaml")
+	viper, err := config.New("../../configs/app.yaml")
 	assert.Nil(t, err)
 
 	options, err := redis.NewOps(viper)
