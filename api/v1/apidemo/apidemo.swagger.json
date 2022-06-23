@@ -1,0 +1,223 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "v1/apidemo/apidemo.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "Apidemo"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/v1/create-sign": {
+      "get": {
+        "summary": "生成签名",
+        "description": "生成签名",
+        "operationId": "Apidemo_CreateSignDemo",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apidemoCreateSignReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "appid",
+            "description": "@gotags: form:\"appid\" uri:\"appid\"\n\nappid",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "nonceStr",
+            "description": "@gotags: form:\"nonce_str\" uri:\"nonce_str\"\n\n随机字符串",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "timeStamp",
+            "description": "@gotags: form:\"time_stamp\" uri:\"time_stamp\"\n\n时间戳",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "apidemo"
+        ]
+      }
+    },
+    "/api/v1/create-token": {
+      "get": {
+        "summary": "生成token",
+        "description": "生成token",
+        "operationId": "Apidemo_CreateTokenDemo",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apidemoCreateTokenReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "jwt-auth"
+        ]
+      }
+    },
+    "/api/v1/get-sign": {
+      "get": {
+        "summary": "接口签名get demo",
+        "description": "接口签名get demo",
+        "operationId": "Apidemo_ApisignCheckDemo",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apidemoSignReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "@gotags: form:\"id\" uri:\"id\"\n\n用户id",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "name",
+            "description": "@gotags: form:\"id\" uri:\"id\"\n\n姓名",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "apidemo"
+        ]
+      }
+    },
+    "/api/v1/get-token-info": {
+      "get": {
+        "summary": "获取token信息",
+        "description": "获取token信息",
+        "operationId": "Apidemo_GetTokenInfo",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apidemoGetTokenInfoReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "jwt-auth"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "apidemoCreateSignReply": {
+      "type": "object",
+      "properties": {
+        "sign": {
+          "type": "string"
+        }
+      }
+    },
+    "apidemoCreateTokenReply": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        }
+      }
+    },
+    "apidemoGetTokenInfoReply": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "apidemoSignReply": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}

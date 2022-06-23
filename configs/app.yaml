@@ -5,7 +5,7 @@ http:
   openApi: true
 
 log:
-  filename: /tmp/app.log
+  filename: ../../runtimes/logs/app.log
   maxSize: 500
   maxBackups: 3
   maxAge: 3
@@ -23,3 +23,22 @@ redis:
   addr: 192.168.56.10:6379
   password: foobared
   db: 1
+
+apisign:
+  secret: apisign2eFKZb7clgoCy6^%*
+  timeout: 20 #min
+  path:
+    - /api.v1.apidemo.Apidemo/ApisignCheckDemo
+  prefix:
+    - /api.v1.apidemo.Apidemo/ApisignCheckDemo
+  whitelist:
+    - /api.v1.helloword.Greeter/GetGreeter
+
+jwt:
+  secret: jwt2eFKZb7clgoCy6^%*
+  path:
+    - /api.v1.apidemo.Apidemo/GetTokenInfo
+  prefix:
+    - /api.v1.apidemo.Apidemo/GetTokenInfo
+  whitelist:
+    - /api.v1.helloword.Greeter/GetGreeter

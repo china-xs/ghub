@@ -10,8 +10,12 @@ import (
 	"ghub/internal/routes"
 	tpl "github.com/china-xs/gin-tpl"
 	"github.com/china-xs/gin-tpl/middleware"
+	"github.com/china-xs/gin-tpl/middleware/apiauth"
+	"github.com/china-xs/gin-tpl/middleware/apiverifier"
 	"github.com/china-xs/gin-tpl/middleware/logger"
 	"github.com/china-xs/gin-tpl/middleware/validate"
+	"github.com/china-xs/gin-tpl/pkg/api_sign"
+	"github.com/china-xs/gin-tpl/pkg/jwt_auth"
 	"github.com/kataras/i18n"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
@@ -46,9 +50,23 @@ func newApp(routes routes.Routes, log *zap.Logger, v *viper.Viper) *tpl.Server {
 	if err != nil {
 		panic(err)
 	}
-	ms := make([]middleware.Middleware, 2)
+
+	//jwt
+	authOptions, err := jwt_auth.NewOps(v)
+	if err != nil {
+		panic(err)
+	}
+	//api sign
+	signOptions, err := api_sign.NewOps(v)
+	if err != nil {
+		panic(err)
+	}
+
+	ms := make([]middleware.Middleware, 4)
 	ms[0] = validate.Validator2I18n(I18n)
 	ms[1] = logger.Logger(log) // 记录系统级别日志 ps 请求出入request|reply 请求耗时
+	ms[2] = apiauth.Authorize(authOptions)
+	ms[3] = apiverifier.ApiVerifier(signOptions)
 	ops = append(ops, opts, tpl.Middleware(ms...))
 	app := tpl.NewServer(ops...)
 	routes.InitRoutes(app)
