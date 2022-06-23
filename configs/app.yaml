@@ -13,15 +13,15 @@ log:
   stdout: true
 
 db:
-  host: 39.100.139.50
-  port: 30008
-  database: enbrands
-  user: prod
-  pwd: g*bb5fo2eFKZb7clgoCy6Tpmd*#m39
-  prefix: t_
+  host: 192.168.56.10
+  port: 3306
+  database: cms
+  user: db_user
+  pwd: db_pass
+  prefix: a_
 redis:
-  addr: 39.100.150.21:30005
-  password: YJF#33bbe31d51b3b60370dc5%2016
+  addr: 192.168.56.10:6379
+  password: foobared
   db: 1
 
 apisign:
